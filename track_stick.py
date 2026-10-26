@@ -9,6 +9,8 @@ UPPER_GREEN = np.array([85, 255, 255], dtype=np.uint8)
 
 MIN_MARKER_AREA = 40  # Ignore tiny patches of green.
 
+# MM_PER PIXEL = known_distance_mm/ measured_distance_pixels
+MM_PER_PIXEL = 0.4 # replace with our measured value
 
 def find_marker(frame):
     """Return the marker's center and outline, or None."""
@@ -72,6 +74,7 @@ def main():
 
             if marker is None:
                 message = "Tracking lost or ambiguous"
+                message_mm = ""
                 color = (0, 0, 255)
             else:
                 x, y, contour = marker
@@ -80,13 +83,26 @@ def main():
                 cv2.drawContours(frame, [contour], -1, (0, 255, 0), 2)
                 cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
-                message = f"Marker: x={x:.1f}, y={y:.1f} pixels"
+                x_mm = x * MM_PER_PIXEL
+                y_mm = y * MM_PER_PIXEL
+                message = f"marker: x={x: .1f} pixels, y={y: .1f} pixels"
+                message_mm = f"marker: x={x_mm:.1f} mm, y={y_mm:.1f} mm"
                 color = (0, 255, 0)
 
             cv2.putText(
                 frame,
                 message,
                 (20, 35),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.7,
+                color,
+                2,
+            )
+
+            cv2.putText(
+                frame,
+                message_mm,
+                (20, 65),
                 cv2.FONT_HERSHEY_SIMPLEX,
                 0.7,
                 color,
