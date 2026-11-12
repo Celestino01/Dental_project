@@ -4,3 +4,16 @@ __pycache__/
 *.pyc
 .env
 .DS_Store
+
+# ML model weights
+*.pt
+*.pth
+*.ckpt
+
+# Python
+__pycache__/
+.venv/
+*.pyc
+
+# Large media
+*.mp4
